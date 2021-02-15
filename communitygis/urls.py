@@ -24,15 +24,23 @@ from django.views.generic import TemplateView
 from geonode.urls import urlpatterns
 from geonode.monitoring import register_url_event
 
+from django.urls import path, re_path, include
+
+
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns += [
 ## include your urls here
+	url(r'^dashboard/', include('dashboard.urls')),
+	url(r'^schoolgis/',include('school_gis.urls')),
 
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-homepage = register_url_event()(TemplateView.as_view(template_name='site_index.html'))
+# homepage = register_url_event()(TemplateView.as_view(template_name='site_index.html'))
 
 urlpatterns = [
-    url(r'^/?$',
-        homepage,
-        name='home'),
+   url(r'^/?$',
+       TemplateView.as_view(template_name='landing-page.html'),
+       name='home'),
  ] + urlpatterns
